@@ -19,7 +19,6 @@
       position: relative;
     }
 
-    /* Devii pop & stay */
     h1 {
       font-size: 60px;
       margin-bottom: 20px;
@@ -34,7 +33,6 @@
       100% { transform: scale(1) rotate(0deg); opacity: 1; }
     }
 
-    /* Other text sliding in */
     .text-line {
       opacity: 0;
       display: inline-block;
@@ -51,17 +49,15 @@
       100% { transform: translateX(0); opacity: 1; }
     }
 
-    /* Slight up-down float after everything appears */
     .float-all {
       animation: floatAll 3s ease-in-out infinite;
     }
 
     @keyframes floatAll {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-5px); }
+      0%,100%{transform:translateY(0);}
+      50%{transform:translateY(-5px);}
     }
 
-    /* Background emojis */
     .emoji {
       font-size: 28px;
       position: absolute;
@@ -73,13 +69,14 @@
       100% { transform: translateY(-50vh) rotate(360deg); opacity: 0; }
     }
 
-    /* Optional: invisible overlay to trigger audio on first tap (iOS fix) */
+    /* Overlay for autoplay fix */
     #audio-overlay {
       position: fixed;
       top:0;
       left:0;
       width:100%;
       height:100%;
+      background:transparent;
       z-index:1000;
       cursor:pointer;
     }
@@ -87,47 +84,46 @@
 </head>
 <body>
 
-<!-- Devii line stays -->
 <h1 id="devii">Deviiiii ✋🎀</h1>
-
-<!-- Other text lines -->
 <div id="text-lines">
   <p class="text-line">Enjoy your food 🍕🍔🍟</p>
-  <br>
   <p class="text-line">Eat properly okayyy 😌💕</p>
-  <br>
   <p class="text-line">And don't forget to send me the empty box picture 😏📸</p>
 </div>
 
-<!-- Floating emojis script -->
-<script>
-  const emojiList = ['💖','🌸','🎀','✨','🥺','🍓','🧁','🐻','💞','💗','💘','💕'];
-  const totalEmojis = 50;
-
-  for(let i=0; i<totalEmojis; i++){
-    const emoji = document.createElement('div');
-    emoji.classList.add('emoji');
-    emoji.innerText = emojiList[Math.floor(Math.random()*emojiList.length)];
-    emoji.style.left = Math.random() * 100 + 'vw';
-    emoji.style.fontSize = (10 + Math.random()*30) + 'px';
-    emoji.style.animationDuration = (5 + Math.random()*10) + 's';
-    emoji.style.animationDelay = (Math.random()*5) + 's';
-    document.body.appendChild(emoji);
-  }
-
-  // After all text slides in, make them float slightly
-  setTimeout(() => {
-    document.getElementById('text-lines').classList.add('float-all');
-  }, 3000); // delay matches slideIn animations
-</script>
-
-<!-- Audio -->
 <audio id="bg-audio" loop>
   <source src="https://raw.githubusercontent.com/Abiii1401/food-del/main/Thangapoovey.mp3" type="audio/mpeg">
 </audio>
 
-<!-- Invisible overlay for iOS autoplay fix -->
-<div id="audio-overlay" onclick="document.getElementById('bg-audio').play(); this.style.display='none';"></div>
+<script>
+  // Floating emojis
+  const emojiList = ['💖','🌸','🎀','✨','🥺','🍓','🧁','🐻','💞','💗','💘','💕'];
+  const totalEmojis = 50;
+  for(let i=0;i<totalEmojis;i++){
+    const emoji = document.createElement('div');
+    emoji.classList.add('emoji');
+    emoji.innerText = emojiList[Math.floor(Math.random()*emojiList.length)];
+    emoji.style.left = Math.random()*100+'vw';
+    emoji.style.fontSize = (10+Math.random()*30)+'px';
+    emoji.style.animationDuration = (5+Math.random()*10)+'s';
+    emoji.style.animationDelay = (Math.random()*5)+'s';
+    document.body.appendChild(emoji);
+  }
+
+  // Float other text lines after animation
+  setTimeout(()=>{
+    document.getElementById('text-lines').classList.add('float-all');
+  },3000);
+
+  // Autoplay fix overlay
+  const overlay = document.createElement('div');
+  overlay.id = 'audio-overlay';
+  overlay.addEventListener('click', ()=>{
+    document.getElementById('bg-audio').play();
+    overlay.remove(); // remove overlay after first tap
+  });
+  document.body.appendChild(overlay);
+</script>
 
 </body>
 </html>
